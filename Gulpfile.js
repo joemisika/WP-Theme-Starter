@@ -11,7 +11,9 @@ var config = {
 	npmDir: './node_modules'
 }
 
-gulp.task('copy-files', function() {
-	return gulp.src(['./node_modules/bootstrap-sass/assets/stylesheets/bootstrap.scss', './node_modules/font-awesome/scss/font-awesome.scss'])
-		.pipe(gulp.dest('./css/'))
+gulp.task('sass', function() {
+	return gulp.src('./css/style.scss')
+		.pipe(sass({style: 'compressed'})
+		.on('error', sass.logError))
+		.pipe(gulp.dest('./'));
 });
