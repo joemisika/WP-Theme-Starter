@@ -53,6 +53,75 @@ Initial release
 
 Only the basics with notes on what to do with gulp.
 
-run
-run npm install -g gulp gulp-cli
+Make sure you have npm & node installed on your machine - https://nodejs.org/en/download/package-manager. If you have issues about Permissions, please run commands as a super user.
+
+$ npm install -g gulp gulp-cli
+
+Switch to the folder with the theme:
+
+$ cd theme-folder-name/wp-content/theme-name
+
+Install gulp, gulp-concat(for concatenation) and gulp-sass locally, still inside the theme-name folder
+$ npm install gulp gulp-concat gulp-sass --save-dev
+-this will also create a node_modules folder - make sure you include it to your gitignore as its a big folder and we don't want it pushed up to the server. We can always get it for a new project by running npm install
+
+Create a Gulpfile.js inside the theme-name
+
+$ touch Gulpfile.js
+
+New Folder/file structure
+-theme-name-folder
+--css(folder)
+--js(folder)
+--images(folder)
+--node_modules(folder)
+--fonts
+--404.php
+--about.php
+--contact.php
+--Gulpfile.js
+--footer.php
+--functions.php
+--header.php
+--index.php
+--package.json
+--style.css
+
+In style.scss we then do an import of the bootstrap plus font-awesome sass files - they are already included in the node_modules folder, if they are not then just run:
+
+$ npm install bootstrap-sass font-awesome --save-dev
+
+styles.scss
+
+@import "./node_modules/bootstrap-sass/assets/stylesheets/bootstrap"
+@import "./node_modules/font-awesome/scss/font-awesome";
+
+in your Gulpfile.js then put the following information:
+NOTE: The plugins we downloaded when we ran npm install gulp gulp-sass gulp-concat --save-dev
+
+var gulp = require('gulp');
+var sass = require('gulp-sass');
+var concat = require('gulp-concat');
+
+gulp.task('sass', function() {
+	return gulp.src('./css/style.scss')
+		.pipe(sass({style: 'compressed'})
+		.on('error', sass.logError))
+		.pipe(gulp.dest('./'));
+});
+
+Task takes source file style.scss inside css folder, processes it and writes it to style.css. Check it you will see it has the comment we had in style.scss, bootstrap css and fontawesome css
+
+Now instead of loading multiple css files in functions, we load only one - being styles.css
+
+function theme-name_scripts() {
+// Theme stylesheet.
+wp_enqueue_style( 'ssb-style', get_stylesheet_uri() );
+
+}
+add_action('wp_enqueue_scripts', 'theme-name_scripts');
+
+Next i will add the minifying our css bit and also concatenating our js files
+
+
 
