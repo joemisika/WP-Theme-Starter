@@ -116,7 +116,7 @@ Now instead of loading multiple css files in functions, we load only one - being
 
 function theme-name_scripts() {
 // Theme stylesheet.
-wp_enqueue_style( 'ssb-style', get_stylesheet_uri() );
+wp_enqueue_style( 'theme-name-style', get_stylesheet_uri() );
 
 }
 add_action('wp_enqueue_scripts', 'theme-name_scripts');
