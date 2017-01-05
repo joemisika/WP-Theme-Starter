@@ -87,6 +87,13 @@ New Folder/file structure
 --package.json
 --style.css
 
+NOTE: remember to ignore the node modules folder in your git files as this is a very large folder with lots of different components. Create a .gitignore and add the following:
+
+node_modules
+.DS_Store
+
+I am on a Mac and it create .DS_Store folders in every folder, so just ignore it if you are on Linux or Windows. Save, Commit and push it to your environment.
+
 In style.scss we then do an import of the bootstrap plus font-awesome sass files - they are already included in the node_modules folder, if they are not then just run:
 
 $ npm install bootstrap-sass font-awesome --save-dev
@@ -110,7 +117,7 @@ gulp.task('sass', function() {
 		.pipe(gulp.dest('./'));
 });
 
-Task takes source file style.scss inside css folder, processes it and writes it to style.css. Check it you will see it has the comment we had in style.scss, bootstrap css and fontawesome css
+Task takes source file style.scss inside css folder, processes it and writes it to style.css.
 
 Now instead of loading multiple css files in functions, we load only one - being styles.css
 
@@ -121,7 +128,66 @@ wp_enqueue_style( 'theme-name-style', get_stylesheet_uri() );
 }
 add_action('wp_enqueue_scripts', 'theme-name_scripts');
 
+Before we run our sass to make sure its doing the right thing, we need to tweak two things inside:
+
+node_modules/bootstrap-sass/assets/stylesheets/_variables.scss
+
+Change this line:
+
+$icon-font-path: if($bootstrap-sass-asset-helper, "bootstrap/", "../fonts/bootstrap/") !default;
+
+to:
+
+$icon-font-path: if($bootstrap-sass-asset-helper, "bootstrap/", "./fonts/bootstrap/") !default;
+
+so that it looks for the fonts folder in the current directory instead of it going one folder up.
+
+And do the same for font-awesome fonts:
+
+node_modules/font-awesome/scss/_variables.scss
+
+change this line:
+
+$fa-font-path:        "../fonts" !default;
+
+to:
+
+$fa-font-path:        "./fonts" !default;
+
+Remember to do the above instructions after everytime time you have run npm install.
+
+Run gulp sass from your command line
+
+$gulp sass
+[13:58:37] Using gulpfile ~/Code/themestarter/wp-content/themes/themestarter/gulpfile.js
+[13:58:38] Starting 'sass'...
+[13:58:39] Finished 'sass' after 1.41 s
+
+the output should be similar to the one above if there are no errors. Please note that your gulpfile might be in a different path location than the one shown above.
+
+We also need to copy fonts(fontawesome plus glyphicons that come with Bootstrap 3.*) from node_modules folder to our fonts folder which we create inside our theme(themestarter) folder.
+
+create a new array to hold all the locations for the fonts to be moved:
+var fontsToMove = [
+	'./node_modules/font-awesome/fonts/**.*',
+	'./node_modules/bootstrap-sass/assets/fonts/*/**.*'
+];
+
+Create a new gulp task which we will call fonts in this case:
+
+gulp.task('fonts', function() {
+	return gulp.src(fontsToMove, {})
+	.pipe(gulp.dest('./fonts'));
+});
+
+The task takes whatever we have defined on fontsToMove and copies it to our destination folder called fonts inside our theme(themestarter) folder.
+
+We now need to run
+
+$gulp fonts
+
 Next i will add the minifying our css bit and also concatenating our js files
+
 
 
 
