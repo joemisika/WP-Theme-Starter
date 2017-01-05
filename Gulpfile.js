@@ -17,3 +17,13 @@ gulp.task('sass', function() {
 		.on('error', sass.logError))
 		.pipe(gulp.dest('./'));
 });
+
+var fontsToMove = [
+	'./node_modules/font-awesome/fonts/**.*',
+	'./node_modules/bootstrap-sass/assets/fonts/*/**.*'
+];
+
+gulp.task('fonts', function() {
+	return gulp.src(fontsToMove, {})
+	.pipe(gulp.dest('./fonts'));
+});
