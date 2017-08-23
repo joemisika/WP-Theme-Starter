@@ -1,0 +1,1 @@
+<h1>The category template. Used when a category is queried.</h1>

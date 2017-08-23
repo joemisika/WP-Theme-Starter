@@ -1,0 +1,1 @@
+<h1>The author template. Used when an author is queried.</h1>

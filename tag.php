@@ -1,0 +1,1 @@
+<h1>The tag template. Used when a tag is queried.</h1>

@@ -1,0 +1,1 @@
+<h1>The page template. Used when an individual Page is queried.</h1>
